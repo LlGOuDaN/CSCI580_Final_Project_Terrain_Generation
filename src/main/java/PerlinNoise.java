@@ -47,10 +47,10 @@ public class PerlinNoise extends Noise {
         y = y - yfloor;
         double xfade = fade(x);
         double yfade = fade(y);
-        int NW = permutation[permutation[A] + C];
-        int NE = permutation[permutation[B] + C];
-        int SW = permutation[permutation[A] + D];
-        int SE = permutation[permutation[B] + D];
+        int NW = permutation[(permutation[A] + C)%256];
+        int NE = permutation[(permutation[B] + C)%256];
+        int SW = permutation[(permutation[A] + D)%256];
+        int SE = permutation[(permutation[B] + D)%256];
         double gNW = grad(NW % 4, x, y);
         double gNE = grad(NE % 4, x, y);
         double gSW = grad(SW % 4, x, y);
