@@ -151,19 +151,19 @@ public class PerlinNoise extends Noise {
 
     @Override
     public float[][] generateMap() {
-        float[][] noiseMap = new float[xres * 50][yres * 50];
-        for (int x = 0; x < xres * 50; x++) {
-            for (int y = 0; y < yres * 50; y++) {
-                noiseMap[x][y] = OctavePerlin(x / 50.0f, y / 50.0f, 0.0f, 10, 0.5f);
-            }
-        }
-        float[][] resultMap = new float[xres][yres];
+        float[][] noiseMap = new float[xres][yres];
         for (int x = 0; x < xres; x++) {
             for (int y = 0; y < yres; y++) {
-                resultMap[x][y] = noiseMap[x][y];
+                noiseMap[x][y] = OctavePerlin(x / 100.0f, y / 100.0f, 0.0f, 10, 0.5f);
             }
         }
-        return resultMap;
+        for (int x = 0; x < xres; x++) {
+            noiseMap[x][0] = noiseMap[x][yres - 1];
+        }
+        for (int y = 0; y < yres; y++) {
+            noiseMap[0][y] = noiseMap[xres - 1][y];
+        }
+        return noiseMap;
     }
 
  /*   private float getPoint(float x, float y) {
