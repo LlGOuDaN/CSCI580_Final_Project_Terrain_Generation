@@ -38,7 +38,7 @@ public class PerlinNoise extends Noise {
 
     private float getPoint(float x, float y) {
         int xfloor = (int) Math.floor(x);
-        int yfloor = (int) Math.floor(x);
+        int yfloor = (int) Math.floor(y);
         int A = xfloor % 256;
         int B = (xfloor + 1) % 256;
         int C = yfloor % 256;
@@ -57,6 +57,7 @@ public class PerlinNoise extends Noise {
         float gSE = grad(SE % 4, x, y);
         float top = lerp(xfade, gNW, gNE);
         float bot = lerp(xfade, gSW, gSE);
+//        System.out.println(top + " " + bot + " " + xfade + " " + yfade);
         return lerp(yfade, top, bot);
     }
 
@@ -66,7 +67,7 @@ public class PerlinNoise extends Noise {
 
 
     private float fade(float t) {
-        return 6 * (float) Math.pow(t, 5) - 15 * (float)Math.pow(t, 4) + 10 * (float)Math.pow(t, 3);
+        return 6 * (float) Math.pow(t, 5) - 15 * (float) Math.pow(t, 4) + 10 * (float) Math.pow(t, 3);
     }
 
 
