@@ -180,7 +180,8 @@ public class HeightMapMesh {
     }
 
     private float getHeight(int x, int z) {
-        return (heightMap[x][z] / Math.abs(minHeight-maxHeight)) * Math.abs(minY-maxY);
+        float d = Math.abs(minHeight-maxHeight);
+        return minY + (((heightMap[x][z] - minHeight) / d) * Math.abs(minY-maxY));
     }
 
 }

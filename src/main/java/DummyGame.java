@@ -38,7 +38,7 @@ public class DummyGame implements IGameLogic {
         scene = new Scene();
 
         float terrainScale = 10;
-        int terrainSize = 3;
+        int terrainSize = 1;
         float minY = -0.1f;
         float maxY = 0.1f;
         int textInc = 40;
