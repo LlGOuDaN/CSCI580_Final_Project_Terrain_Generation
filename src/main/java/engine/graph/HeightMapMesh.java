@@ -3,8 +3,13 @@ package engine.graph;
 import engine.Utils;
 import org.joml.Vector3f;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 
 
 public class HeightMapMesh {
@@ -49,7 +54,37 @@ public class HeightMapMesh {
                 minHeight = Math.min(minHeight, heightMap[i][j]);
             }
         }
-        Texture texture = new Texture(textureFile);
+        BufferedImage bi = new BufferedImage(width, height, TYPE_INT_RGB);
+
+        for(int i = 0; i < heightMap.length; ++i) {
+            for(int j = 0; j < heightMap[0].length; ++j) {
+                float d = Math.abs(minHeight-maxHeight);
+                float percent = (heightMap[i][j] - minHeight) / d;
+                int r = 255;
+                int g = 255;
+                int b = 255;
+                if(0 <= percent && percent <= 0.2) {
+                    r = 0;
+                    g = 0;
+                    b = 255;
+                } else if(0.2 < percent && percent <= 0.4) {
+                    r = 0;
+                    g = 255;
+                    b = 0;
+                } else if(0.4 < percent && percent <= 0.8) {
+                    r = 110;
+                    g = 38;
+                    b = 14;
+                }
+                int rgb = r;
+                rgb = (rgb << 8) + g;
+                rgb = (rgb << 8) + b;
+                bi.setRGB(i,j, rgb);
+            }
+        }
+        File outTerrain = new File("./src/textures/out.png");
+        ImageIO.write(bi, "PNG", outTerrain);
+        Texture texture = new Texture("./src/textures/out.png");
 
         float incx = getXLength() / (width - 1);
         float incz = getZLength() / (height - 1);
@@ -66,8 +101,8 @@ public class HeightMapMesh {
                 positions.add(STARTZ + row * incz); //z
 
                 // Set texture coordinates
-                textCoords.add((float) textInc * (float) col / (float) width);
-                textCoords.add((float) textInc * (float) row / (float) height);
+                textCoords.add((float) 1 * (float) col / (float) width);
+                textCoords.add((float) 1 * (float) row / (float) height);
 
                 // Create indices
                 if (col < width - 1 && row < height - 1) {
