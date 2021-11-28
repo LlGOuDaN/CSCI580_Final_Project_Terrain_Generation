@@ -112,6 +112,7 @@ public class PerlinNoise extends Noise {
     public static float fade(float t) {
         // Fade function as defined by Ken Perlin.  This eases coordinate values
         // so that they will "ease" towards integral values.  This ends up smoothing
+        // so that they will "ease" towards integral values.  This ends up smoothing
         // the final output.
         return t * t * t * (t * (t * 6 - 15) + 10);            // 6t^5 - 15t^4 + 10t^3
     }
@@ -154,14 +155,9 @@ public class PerlinNoise extends Noise {
         float[][] noiseMap = new float[xres][yres];
         for (int x = 0; x < xres; x++) {
             for (int y = 0; y < yres; y++) {
-                noiseMap[x][y] = OctavePerlin(x / 100.0f, y / 100.0f, 0.0f, 10, 0.5f);
+                noiseMap[x][y] = OctavePerlin(x / (float)xres, y / (float)yres, 0.0f, 10, 0.5f);
+//                noiseMap[x][y] = perlin(x / 100.0f, y / 100.0f, 0.0f, 10, 0.5f);
             }
-        }
-        for (int x = 0; x < xres; x++) {
-            noiseMap[x][0] = noiseMap[x][yres - 1];
-        }
-        for (int y = 0; y < yres; y++) {
-            noiseMap[0][y] = noiseMap[xres - 1][y];
         }
         return noiseMap;
     }
@@ -196,7 +192,7 @@ public class PerlinNoise extends Noise {
         float gSE = grad(bb % 4, x - 1, y - 1);
         float top = lerp(xfade, gNW, gNE);
         float bot = lerp(xfade, gSW, gSE);
-//        System.out.println(top + " " + bot + " " + xfade + " " + yfade);
+        System.out.println(top + " " + bot + " " + xfade + " " + yfade);
         return lerp(yfade, top, bot);
     }
 

@@ -25,7 +25,7 @@ public class HeightMapMesh {
     private final float maxY;
 
     private final Mesh mesh;
-    
+
     private final Noise noise;
 
     private float maxHeight;
@@ -43,43 +43,59 @@ public class HeightMapMesh {
         width = 256;
         height = 256;
 
-        noise = new PerlinNoise(width, height);
+        noise = new PolynomialNoise(width, height);
         heightMap = noise.generateMap();
         maxHeight = heightMap[0][0];
         minHeight = heightMap[0][0];
 
-        for(int i = 0; i < heightMap.length; ++i) {
-            for(int j = 0; j < heightMap[0].length; ++j) {
+        for (int i = 0; i < heightMap.length; ++i) {
+            for (int j = 0; j < heightMap[0].length; ++j) {
                 maxHeight = Math.max(maxHeight, heightMap[i][j]);
                 minHeight = Math.min(minHeight, heightMap[i][j]);
             }
         }
         BufferedImage bi = new BufferedImage(width, height, TYPE_INT_RGB);
 
-        for(int i = 0; i < heightMap.length; ++i) {
-            for(int j = 0; j < heightMap[0].length; ++j) {
-                float d = Math.abs(minHeight-maxHeight);
+        for (int i = 0; i < heightMap.length; ++i) {
+            for (int j = 0; j < heightMap[0].length; ++j) {
+                float d = Math.abs(minHeight - maxHeight);
                 float percent = (heightMap[i][j] - minHeight) / d;
                 int r = 255;
                 int g = 255;
                 int b = 255;
-                if(0 <= percent && percent <= 0.2) {
-                    r = 0;
-                    g = 0;
-                    b = 255;
-                } else if(0.2 < percent && percent <= 0.4) {
-                    r = 0;
-                    g = 255;
-                    b = 0;
-                } else if(0.4 < percent && percent <= 0.8) {
-                    r = 110;
-                    g = 38;
-                    b = 14;
+                float min = 0.0f;
+                float ocean_forest = 0.4f;
+                float forest_mountain = 0.5f;
+                float mountain_snow = 0.8f;
+                float max = 1.0f;
+                if (percent <= ocean_forest) {
+                    heightMap[i][j] = ocean_forest * d + minHeight;
+                }
+                int[] rgb_ocean = {0, 41, 58};
+                int[] rgb_forest = {13, 55, 13};
+                int[] rgb_mountain = {85, 65, 36};
+                int[] rgb_snow = {243, 246, 251};
+                if (min <= percent && percent <= ocean_forest) {
+                    r = rgb_ocean[0];
+                    g = rgb_ocean[1];
+                    b = rgb_ocean[2];
+                } else if (ocean_forest < percent && percent <= forest_mountain) {
+                    r = rgb_forest[0] + (int) ((rgb_mountain[0] - rgb_forest[0]) * ((percent - ocean_forest) / (forest_mountain - ocean_forest)));
+                    g = rgb_forest[1] + (int) ((rgb_mountain[1] - rgb_forest[1]) * ((percent - ocean_forest) / (forest_mountain - ocean_forest)));
+                    b = rgb_forest[2] + (int) ((rgb_mountain[2] - rgb_forest[2]) * ((percent - ocean_forest) / (forest_mountain - ocean_forest)));
+                } else if (forest_mountain < percent && percent <= mountain_snow) {
+                    r = rgb_mountain[0] + (int) ((rgb_snow[0] - rgb_mountain[0]) * (percent - forest_mountain));
+                    g = rgb_mountain[1] + (int) ((rgb_snow[1] - rgb_mountain[1]) * (percent - forest_mountain));
+                    b = rgb_mountain[2] + (int) ((rgb_snow[2] - rgb_mountain[2]) * (percent - forest_mountain));
+                } else if (mountain_snow < percent && percent <= max) {
+                    r = rgb_snow[0];
+                    g = rgb_snow[1];
+                    b = rgb_snow[2];
                 }
                 int rgb = r;
                 rgb = (rgb << 8) + g;
                 rgb = (rgb << 8) + b;
-                bi.setRGB(i,j, rgb);
+                bi.setRGB(i, j, rgb);
             }
         }
         File outTerrain = new File("./src/textures/out.png");
@@ -215,8 +231,8 @@ public class HeightMapMesh {
     }
 
     private float getHeight(int x, int z) {
-        float d = Math.abs(minHeight-maxHeight);
-        return minY + (((heightMap[x][z] - minHeight) / d) * Math.abs(minY-maxY));
+        float d = Math.abs(minHeight - maxHeight);
+        return minY + (((heightMap[x][z] - minHeight) / d) * Math.abs(minY - maxY));
     }
 
 }
