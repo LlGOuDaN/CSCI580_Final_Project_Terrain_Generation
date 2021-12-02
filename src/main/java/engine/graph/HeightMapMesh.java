@@ -43,7 +43,7 @@ public class HeightMapMesh {
         width = 256;
         height = 256;
 
-        noise = new PolynomialNoise(width, height);
+        noise = new PerlinNoise(width, height);
         heightMap = noise.generateMap();
         maxHeight = heightMap[0][0];
         minHeight = heightMap[0][0];
@@ -69,12 +69,13 @@ public class HeightMapMesh {
                 float mountain_snow = 0.8f;
                 float max = 1.0f;
                 if (percent <= ocean_forest) {
-                    heightMap[i][j] = ocean_forest * d + minHeight;
+//                    heightMap[i][j] = ocean_forest * d + minHeight;
                 }
                 int[] rgb_ocean = {0, 41, 58};
                 int[] rgb_forest = {13, 55, 13};
                 int[] rgb_mountain = {85, 65, 36};
                 int[] rgb_snow = {243, 246, 251};
+                int[] rgbwhite = {255, 255, 255};
                 if (min <= percent && percent <= ocean_forest) {
                     r = rgb_ocean[0];
                     g = rgb_ocean[1];

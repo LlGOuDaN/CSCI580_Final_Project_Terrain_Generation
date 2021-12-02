@@ -49,9 +49,9 @@ public class DummyGame implements IGameLogic {
         setupLights();
 
         camera.getPosition().x = 0.0f;
-        camera.getPosition().z = 0.0f;
-        camera.getPosition().y = -0.2f;
-        camera.getRotation().x = 10.f;
+        camera.getPosition().z = 8.0f;
+        camera.getPosition().y = 7.0f;
+        camera.getRotation().x = 45.f;
     }
 
     private void setupLights() {

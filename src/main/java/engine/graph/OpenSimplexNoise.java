@@ -679,7 +679,7 @@ public class OpenSimplexNoise extends Noise {
         float[][] noiseMap = new float[xres][yres];
         for (int x = 0; x < xres; x++) {
             for (int y = 0; y < yres; y++) {
-                noiseMap[x][y] = OctaveEval(x / (float) xres, y / (float) yres, 0.0f, 10, 0.5f);
+                noiseMap[x][y] = OctaveEval(x / (float) xres, y / (float) yres, 0.0f, 8, 0.5f);
             }
         }
         return noiseMap;
